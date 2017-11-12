@@ -1,0 +1,79 @@
+<group>
+	<ofxOssiaDevice>
+		<control>
+			<base>0.5</base>
+			<elbow>0.5</elbow>
+			<shoulder>0.5</shoulder>
+			<clamp>0.5</clamp>
+		</control>
+		<base>
+			<meArm>
+				<min>9</min>
+				<max>180</max>
+			</meArm>
+			<my3d>
+				<length>0.0543906</length>
+				<width>0.05</width>
+				<rotation_axes>0, 1, 0</rotation_axes>
+				<angle_min>90</angle_min>
+				<angle_max>-89</angle_max>
+			</my3d>
+		</base>
+		<elbow>
+			<meArm>
+				<min>57</min>
+				<max>144</max>
+			</meArm>
+			<my3d>
+				<length>0.2</length>
+				<width>0.05</width>
+				<rotation_axes>1, 0, 0</rotation_axes>
+				<angle_min>19</angle_min>
+				<angle_max>-49</angle_max>
+			</my3d>
+		</elbow>
+		<shoulder>
+			<meArm>
+				<min>7</min>
+				<max>116</max>
+			</meArm>
+			<my3d>
+				<length>0.2</length>
+				<width>0.05</width>
+				<rotation_axes>1, 0, 0</rotation_axes>
+				<angle_min>-158</angle_min>
+				<angle_max>-24</angle_max>
+			</my3d>
+		</shoulder>
+		<clamp>
+			<meArm>
+				<min>21</min>
+				<max>80</max>
+			</meArm>
+			<my3d>
+				<length>0.059703</length>
+				<width>0.05</width>
+				<rotation_axes>0, 1, 0</rotation_axes>
+				<angle_min>-45</angle_min>
+				<angle_max>0</angle_max>
+			</my3d>
+		</clamp>
+	<Control>
+			<servo1>0.536651</servo1>
+			<servo2>0.5</servo2>
+		</Control>
+		<servo1>
+			<MIN_MAX>
+				<min>0</min>
+				<max>180</max>
+			</MIN_MAX>
+		</servo1>
+		<servo2>
+			<MIN_MAX>
+				<min>70</min>
+				<max>110</max>
+			</MIN_MAX>
+		</servo2>
+	</ofxOssiaDevice>
+<group/>
+</group>
