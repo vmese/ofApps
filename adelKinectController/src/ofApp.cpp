@@ -76,12 +76,13 @@ void ofApp::setup(){
 
 //    movie.initGrabber(w, h, true);
 //    //reserve memory for cv images
-//    rgb.allocate(w, h);
-//    hsb.allocate(w, h);
-//    hue.allocate(w, h);
-//    sat.allocate(w, h);
-//    bri.allocate(w, h);
-//    filtered.allocate(w, h);
+    rgb.allocate(w, h);
+    hsb.allocate(w, h);
+    hue.allocate(w, h);
+    sat.allocate(w, h);
+    bri.allocate(w, h);
+    filtered.allocate(w, h);
+    findHue = 0.0;
 //    faceTracker.setup("haarcascade_frontalface_default.xml");
 //    faceTracker.setPreset(ObjectFinder::Fast);
 
@@ -153,8 +154,8 @@ void ofApp::setup(){
     fOssiaAngleControl5.setup(fOssia.get_root_node(), "Control 5");
 
     fOssiaHeadPositionControl.setup(fOssia.get_root_node(), "Head");
-    fOssiaHeadPositionX.setup(fOssiaHeadPositionControl,"X",512,0,1024);
-    fOssiaHeadPositionY.setup(fOssiaHeadPositionControl,"Y",384,0,768);
+    fOssiaHeadPositionX.setup(fOssiaHeadPositionControl,"X",w/2,0,w);
+    fOssiaHeadPositionY.setup(fOssiaHeadPositionControl,"Y",h/2,0,h);
 
 
     float initialPosValue ;
@@ -199,7 +200,7 @@ void ofApp::setup(){
 
     _gui.add (fOssia.get_root_node());
 
-    cas = 1;
+    cas = 2;
     objectDetectionStartTime = clock();
 }
 
@@ -230,7 +231,7 @@ void ofApp::update(){
 
     // kinext based
     kinect.update();
-    if( cas == 1)
+    if( cas == 2)
     {
         if (kinect.isFrameNew())
         {
@@ -258,36 +259,36 @@ void ofApp::update(){
     }
 
 
-//    if( cas == 1)
-//    {
+    if( cas == 1)
+    {
 
-//        if (movie.isFrameNew()) {
+        if (kinect.isFrameNew()) {
 
-//            //copy webcam pixels to rgb image
-//            rgb.setFromPixels(movie.getPixels()); //, w, h,1);
+            //copy webcam pixels to rgb image
+            rgb.setFromPixels(kinect.getPixels()); //, w, h,1);
 
-//            //mirror horizontal
-//            //rgb.mirror(false, true);
+            //mirror horizontal
+            //rgb.mirror(false, true);
 
-//            //duplicate rgb
-//            hsb = rgb;
+            //duplicate rgb
+            hsb = rgb;
 
-//            //convert to hsb
-//            hsb.convertRgbToHsv();
+            //convert to hsb
+            hsb.convertRgbToHsv();
 
-//            //store the three channels as grayscale images
-//            hsb.convertToGrayscalePlanarImages(hue, sat, bri);
+            //store the three channels as grayscale images
+            hsb.convertToGrayscalePlanarImages(hue, sat, bri);
 
-//            //filter image based on the hue value were looking for
-//            for (int i=0; i<w*h; i++) {
-//                filtered.getPixels()[i] = ofInRange(hue.getPixels()[i],findHue-8,findHue+8) ? 255 : 0;
-//            }
+            //filter image based on the hue value were looking for
+            for (int i=0; i<w*h; i++) {
+                filtered.getPixels()[i] = ofInRange(hue.getPixels()[i],findHue-8,findHue+8) ? 255 : 0;
+            }
 
-//            filtered.flagImageChanged();
-//            //run the contour finder on the filtered image to find blobs with a certain hue
-//            contours.findContours(filtered, 50, w*h/2, 1, false);
-//        }
-//    }
+            filtered.flagImageChanged();
+            //run the contour finder on the filtered image to find blobs with a certain hue
+            contours.findContours(filtered, 50, w*h/2, 1, false);
+        }
+    }
 
 //    if (cas == 2)
 //    {
@@ -457,7 +458,7 @@ void ofApp::draw(){
 
 
  //kinect based
-  if( cas == 1)
+  if( cas == 2)
   {
      easyCam.begin();
      if (bDrawCloud) {
@@ -468,47 +469,47 @@ void ofApp::draw(){
      //drawReport();
   }
 
-//     if( cas == 1)
-//     {
-//         ofSetColor(255,255,255);
+     if( cas == 1)
+     {
+         ofSetColor(255,255,255);
 
-//         //draw all cv images
-//         rgb.draw(0,0); // Seul cette image m'interesse
-//         //hsb.draw(640,0);
-//         //hue.draw(0,240);
-//         //sat.draw(320,240);
-//         //bri.draw(640,240);
-//         //filtered.draw(0,240);   // Celle ci et la suivante sont interessante mais
-//         //contours.draw(0,240);   // Pas la place de la mettre pour avoir un bon rendu
+         //draw all cv images
+         rgb.draw(0,0); // Seul cette image m'interesse
+         //hsb.draw(640,0);
+         //hue.draw(0,240);
+         //sat.draw(320,240);
+         //bri.draw(640,240);
+         //filtered.draw(0,240);   // Celle ci et la suivante sont interessante mais
+         //contours.draw(0,240);   // Pas la place de la mettre pour avoir un bon rendu
 
-//         ofSetColor(255, 0, 0);
-//         ofFill();
+         ofSetColor(255, 0, 0);
+         ofFill();
 
-//         //draw red circles for found blobs
-//         for (int i=0; i<contours.nBlobs; i++)
-//         {
-//             ofCircle(contours.blobs[i].centroid.x, contours.blobs[i].centroid.y, 20);
-//             ofPoint pos = contours.blobs[i].centroid;
+         //draw red circles for found blobs
+         for (int i=0; i<contours.nBlobs; i++)
+         {
+             ofCircle(contours.blobs[i].centroid.x, contours.blobs[i].centroid.y, 20);
+             ofPoint pos = contours.blobs[i].centroid;
 
-//             float xcm = pos.x/37.795275590551;
-//             float ycm = pos.y/37.795275590551;
+             float xcm = pos.x/37.795275590551;
+             float ycm = pos.y/37.795275590551;
 
 
-//             double timeDiffMs = diffclock(clock(),objectDetectionStartTime);
-//             //printf("diff MS = %f\n",timeDiffMs);
-//             if (timeDiffMs>=50.0)
-//             {
-//                 fOssiaHeadPositionX.set(xcm*64);
-//                 fOssiaHeadPositionY.set(ycm*64);
-//                 objectDetectionStartTime = clock();
+             double timeDiffMs = diffclock(clock(),objectDetectionStartTime);
+             //printf("diff MS = %f\n",timeDiffMs);
+             if (timeDiffMs>=50.0)
+             {
+                 fOssiaHeadPositionX.set(xcm*64);
+                 fOssiaHeadPositionY.set(ycm*64);
+                 objectDetectionStartTime = clock();
 
-//             }
-////             lastObjectPositonX = pos.x;
-////             lastObjectPositonY = pos.y;
+             }
+//             lastObjectPositonX = pos.x;
+//             lastObjectPositonY = pos.y;
 
-//             //1cm = 37.795275590551 pixel
-//         }
-//     }
+             //1cm = 37.795275590551 pixel
+         }
+     }
 
 //     if (cas == 2)
 //     {
@@ -581,10 +582,11 @@ void ofApp::draw(){
  ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10 , h + offset);
  ofDrawBitmapStringHighlight(
          string() +
-         "z - repose-toi\n" +
-         "s - leve toi\n" +
-         "a - asservissement moteurs\n" +
-         "t - activation suivi objet / visage\n"
+         "z - Repose-toi\n" +
+         "s - Leve toi\n" +
+         "t - Activation suivi objet / visage\n"+
+         "UP - Augmentation angle kinect\n" +
+         "DOWN - Diminution angle kinect\n"
          ,10,  h + offset);
 
  ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10 , h + offset);
@@ -1039,14 +1041,29 @@ void ofApp::drawPoses() {
         ofTranslate(0, 0, -1000); // center the points a bit
     ofSetColor(0,0,255);
     glLineWidth(3);
-    if(g_means.size()>0) {
-            for(unsigned int i=0;i<g_means.size();++i){
+    if(g_means.size()>0)
+    {
+            for(unsigned int i=0;i<1/*g_means.size()*/;++i)
+            {
                 ofVec3f pos = ofVec3f(g_means[i][0], g_means[i][1], g_means[i][2]);
                 ofVec3f dir = ofVec3f(0,0,-150);
                 dir.rotate(g_means[i][3], g_means[i][4], g_means[i][5]);
                 dir += pos;
                 ofLine(pos.x, pos.y, pos.z, dir.x, dir.y, dir.z);
-            }
+                printf("pos x = %.1f\n",pos.x);
+                printf("pos y = %.1f\n",pos.y);
+                float xcm = (pos.x + float(w)/2)/37.795275590551;
+                float ycm = (pos.y + float(h)/2)/37.795275590551;
+
+                double timeDiffMs = diffclock(clock(),objectDetectionStartTime);
+                //printf("diff MS = %f\n",timeDiffMs);
+                if (timeDiffMs>=50.0)
+                {
+                    fOssiaHeadPositionX.set(xcm*64);
+                    fOssiaHeadPositionY.set(ycm*64);
+                    objectDetectionStartTime = clock();
+                }
+           }
         }
         ofPopMatrix();
 }

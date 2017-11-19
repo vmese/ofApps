@@ -15,6 +15,9 @@
 #include "ofxKinect.h"
 #include "ofxHeadPoseEstimator.h"
 
+#include "ofxCv.h"
+#include "ofxOpenCv.h"
+
 using namespace std;
 using namespace cv;
 
@@ -142,15 +145,15 @@ class ofApp : public ofBaseApp{
         // vision
 //        ofVideoGrabber movie;
 
-//        ofxCvColorImage rgb,hsb;
-//        ofxCvGrayscaleImage hue,sat,bri,filtered;
-//        ofxCvContourFinder contours;
+        ofxCvColorImage rgb,hsb;
+        ofxCvGrayscaleImage hue,sat,bri,filtered;
+        ofxCvContourFinder contours;
 
 //        ofVideoGrabber cam;
 //        ofxCv::ObjectFinder faceTracker;
 
         int w,h, cas;
-//        int findHue;
+        int findHue;
 
         int lastObjectPositonX;
         int lastObjectPositonY;
