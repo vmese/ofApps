@@ -183,6 +183,11 @@ void ofApp::draw(){
                 14, ofGetHeight() - 7 * 12);
 
     }
+    ofDrawBitmapStringHighlight(
+            string() +
+            "1 - suivi object\n" +
+            "2 - suivi visage\n",
+            ofGetWidth()-200, 14);
 }
 
 //--------------------------------------------------------------
