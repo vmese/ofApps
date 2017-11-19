@@ -370,17 +370,17 @@ void ofApp::keyPressed(int key){
 
     switch(key){
 
-    case 'a':
-        if (fMotorsEnabled ==false)
-        {
-            enableMotors(true);
+//    case 'a':
+//        if (fMotorsEnabled ==false)
+//        {
+//            enableMotors(true);
 
-        }
-        else if (fMotorsEnabled==true)
-        {
-            enableMotors(false);
-        }
-        break;
+//        }
+//        else if (fMotorsEnabled==true)
+//        {
+//            enableMotors(false);
+//        }
+//        break;
 
 
     case 't' :
@@ -398,7 +398,7 @@ void ofApp::keyPressed(int key){
         standUp();
         break;
 
-    case 'r' :
+    case 'z' :
         goToRest();
         break;
 
