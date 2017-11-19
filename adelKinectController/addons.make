@@ -1,0 +1,8 @@
+ofxCv
+ofxFaceTracker
+ofxGui
+ofxHeadPoseEstimator
+ofxKinect
+ofxOpenCv
+ofxOSSIA
+ofxXmlSettings
