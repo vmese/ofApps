@@ -10,6 +10,8 @@
 #include <ctime>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/mutex.hpp>
 
 const int kNbOfServos = 5;
 
@@ -133,5 +135,7 @@ class ofApp : public ofBaseApp{
         int lastObjectPositonY;
 
         clock_t objectDetectionStartTime;
+
+        boost::mutex fPosMutex;
 
 };

@@ -287,22 +287,27 @@ void ofApp::update(){
     //servo2.setAngle(fOssiaAngleServo2);
 
     //Rq : need to be called after arbotix->connect
-    arbotix->update();
+    {
+    boost::mutex::scoped_lock lock(fPosMutex);
 
-    //update servos
-    if (arbotix->isInitialized() && fMotorsEnabled) {
-         servo1.setAngle(fOssiaAngleServo1);
-         servo2.setAngle(fOssiaAngleServo2);
-         servo3.setAngle(fOssiaAngleServo3);
-         servo4.setAngle(fOssiaAngleServo4);
-         servo5.setAngle(fOssiaAngleServo5);
-        servo1.update();
-        servo2.update();
-        servo3.update();
-        servo4.update();
-        servo5.update();
-        arbotix->moveServos();
-     }
+        arbotix->update();
+
+        //update servos
+        if (arbotix->isInitialized() && fMotorsEnabled)
+        {
+            servo1.setAngle(fOssiaAngleServo1);
+            servo2.setAngle(fOssiaAngleServo2);
+            servo3.setAngle(fOssiaAngleServo3);
+            servo4.setAngle(fOssiaAngleServo4);
+            servo5.setAngle(fOssiaAngleServo5);
+            servo1.update();
+            servo2.update();
+            servo3.update();
+            servo4.update();
+            servo5.update();
+            arbotix->moveServos();
+         }
+    }
 
 
     // check servos parameters
@@ -586,17 +591,17 @@ void ofApp::keyPressed(int key){
 //        }
 //        break;
 
-    case 'a':
-        if (fMotorsEnabled ==false)
-        {
-            enableMotors(true);
+//    case 'a':
+//        if (fMotorsEnabled ==false)
+//        {
+//            enableMotors(true);
 
-        }
-        else if (fMotorsEnabled==true)
-        {
-            enableMotors(false);
-        }
-        break;
+//        }
+//        else if (fMotorsEnabled==true)
+//        {
+//            enableMotors(false);
+//        }
+//        break;
 
 
     case 't' :
@@ -619,9 +624,54 @@ void ofApp::keyPressed(int key){
         break;
 
     case 'l' :
-        arbotix->setDynamixelRegister(4,0x19,2,1);
+        {
+
+            {
+                boost::mutex::scoped_lock lock(fPosMutex);
+                int pos = servo4.getPos();
+                printf("pos = %i\n",pos);
+                float posFloat = ofMap(pos, fServosMins[3], fServosMax[3],0.,1.);
+                posFloat = posFloat-0.1;
+                if (posFloat>0.0)
+                {
+                    fOssiaAngleServo4.set( posFloat);
+                }
+                else
+                {
+                    fOssiaAngleServo4.set( 0.0);
+                }
+            }
+        }
         break;
 
+    case 'o' :
+        {
+            {
+                boost::mutex::scoped_lock lock(fPosMutex);
+
+                int pos = servo4.getPos();
+                float posFloat = ofMap(pos, fServosMins[3], fServosMax[3],0.,1.);
+                posFloat = posFloat+0.1;
+                if (posFloat<1.0)
+                {
+                    fOssiaAngleServo4.set( posFloat);
+                }
+                else
+                {
+                    fOssiaAngleServo4.set( 1.0);
+                }
+            }
+        }
+        break;
+
+    case 'k' :
+        fOssiaAngleServo5.set( servo5.getPos()-0.1);
+        break;
+
+
+    case 'm' :
+        fOssiaAngleServo5.set( servo5.getPos()+0.1);
+        break;
 
     default:
         break;
