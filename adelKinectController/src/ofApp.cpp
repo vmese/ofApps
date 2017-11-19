@@ -118,27 +118,27 @@ void ofApp::setup(){
     servo1.setController(arbotix);
     servo1.setName("servo1");
     servo1.setId(1);
-    servo1.setSpeed(256); // 256
+    servo1.setSpeed(fServosSpeeds[0]); // 256
 
     servo2.setController(arbotix);
     servo2.setName("servo2");
     servo2.setId(2);
-    servo2.setSpeed(50); //50
+    servo2.setSpeed(fServosSpeeds[1]); //50
 
     servo3.setController(arbotix);
     servo3.setName("servo3");
     servo3.setId(3);
-    servo3.setSpeed(85); //85
+    servo3.setSpeed(fServosSpeeds[2]); //85
 
     servo4.setController(arbotix);
     servo4.setName("servo4");
     servo4.setId(4);
-    servo4.setSpeed(128);
+    servo4.setSpeed(fServosSpeeds[3]);
 
     servo5.setController(arbotix);
     servo5.setName("servo5");
     servo5.setId(5);
-    servo5.setSpeed(128);
+    servo5.setSpeed(fServosSpeeds[4]);
 
     printf("setup servos done");
 
@@ -891,6 +891,7 @@ void ofApp::loadArbotixConfiguration(const std::string &fileName)
     fServosMins.clear();
     fServosMax.clear();
     fServosInitialPos.clear();
+    fServosSpeeds.clear();
 
     int nbServos = fXMLReader.getNumTags("servo");
     if (nbServos>0)
@@ -904,15 +905,17 @@ void ofApp::loadArbotixConfiguration(const std::string &fileName)
               int pos = fXMLReader.getValue("initialPos",0);
               int min = fXMLReader.getValue("min",0);
               int max = fXMLReader.getValue("max",300);
+              int speed = fXMLReader.getValue("speed",300);
 
-              ofLogNotice () << "Servo " << servoName << " id : " <<  id << " initial pos " << pos;
+              ofLogNotice () << "Servo " << servoName << " id : " <<  id << " initial pos " << pos << "speed : " << speed;
 
-              if (servoName!="" && id!=0)
+              if (servoName!="" && id!=0 && speed !=0)
               {
                   fServosNames.push_back(servoName);
                   fServosIds.push_back(id);
                   fServosMins.push_back(min);
                   fServosMax.push_back(max);
+                  fServosSpeeds.push_back(speed);
                   printf("initial pos : %i\n",pos);
                   fServosInitialPos.push_back(pos);
 

@@ -10,6 +10,7 @@
         <min>1</min>
         <max>1024</max>
 	<initialPos>512</initialPos>
+	<speed>256</speed>
 </servo>
 
 <servo>
@@ -19,6 +20,7 @@
         <min>10</min>
         <max>477</max>
         <initialPos>10</initialPos>
+	<speed>50</speed>
 </servo>
 
 <servo>
@@ -28,6 +30,7 @@
         <min>540</min>
         <max>757</max>
         <initialPos>540</initialPos>
+	<speed>85</speed>
 </servo>
 
 <servo>
@@ -37,6 +40,7 @@
 	<min>380</min>
         <max>530</max>
 	<initialPos>380</initialPos>
+	<speed>128</speed>
 </servo>
 
 <servo>
@@ -46,4 +50,5 @@
         <min>380</min>
         <max>620</max>
         <initialPos>500</initialPos>
+	<speed>128</speed>
 </servo>

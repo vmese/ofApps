@@ -100,6 +100,7 @@ class ofApp : public ofBaseApp{
         std::vector<int> fServosMins;
         std::vector<int> fServosMax;
         std::vector<int> fServosInitialPos;
+        std::vector<int> fServosSpeeds;
 
         std::string fArbotixPortName;
         int fArbotixRate;
