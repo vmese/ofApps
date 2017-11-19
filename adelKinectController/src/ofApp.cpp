@@ -582,11 +582,15 @@ void ofApp::draw(){
  ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10 , h + offset);
  ofDrawBitmapStringHighlight(
          string() +
-         "z - Repose-toi\n" +
-         "s - Leve toi\n" +
-         "t - Activation suivi objet / visage\n"+
-         "UP - Augmentation angle kinect\n" +
-         "DOWN - Diminution angle kinect\n"
+         "z : Repose-toi\n" +
+         "s : Leve toi\n" +
+         "t : Activation suivi objet / visage\n"+
+         "+ : Augmentation angle kinect\n" +
+         "- : Diminution angle kinect\n" +
+         "UP : Move Head up\n" +
+         "DOWN :  Move Head down\n" +
+         "LEFT :  Move Head left\n" +
+         "RIGHT :  Move Head right\n"
          ,10,  h + offset);
 
  ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10 , h + offset);
@@ -595,7 +599,7 @@ void ofApp::draw(){
          "0 - Pas de detection\n" +
          "1 - Detection objet\n" +
          "2 - Detection visage\n"
-         ,10,  h + offset + 8*12);
+         ,10,  h + offset + 14*12);
 
 // ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10 , h + offset);
 // ofDrawBitmapStringHighlight(
@@ -739,58 +743,68 @@ void ofApp::keyPressed(int key){
         goToRest();
         break;
 
-    case 'l' :
+    case OF_KEY_DOWN :
         {
-
+            printf("key down pressed\n");
             {
-                boost::mutex::scoped_lock lock(fPosMutex);
-                int pos = servo4.getPos();
-                printf("pos = %i\n",pos);
-                float posFloat = ofMap(pos, fServosMins[3], fServosMax[3],0.,1.);
-                posFloat = posFloat-0.1;
-                if (posFloat>0.0)
+                float currentVal = fOssiaAngleServo4;
+                currentVal -=0.05;
+                if (currentVal<=0.0)
                 {
-                    fOssiaAngleServo4.set( posFloat);
+                    currentVal = 0.0;
                 }
-                else
-                {
-                    fOssiaAngleServo4.set( 0.0);
-                }
+                fOssiaAngleServo4.set(currentVal);
             }
         }
         break;
 
-    case 'o' :
+    case OF_KEY_UP :
         {
-            {
-                boost::mutex::scoped_lock lock(fPosMutex);
 
-                int pos = servo4.getPos();
-                float posFloat = ofMap(pos, fServosMins[3], fServosMax[3],0.,1.);
-                posFloat = posFloat+0.1;
-                if (posFloat<1.0)
+            {
+                float currentVal = fOssiaAngleServo4;
+                currentVal +=0.05;
+                if (currentVal>=1.0)
                 {
-                    fOssiaAngleServo4.set( posFloat);
+                    currentVal = 1.0;
                 }
-                else
+                fOssiaAngleServo4.set(currentVal);
+                }
+        }
+        break;
+
+    case OF_KEY_RIGHT :
+        {
+            printf("key down pressed\n");
+            {
+                float currentVal = fOssiaAngleServo5;
+                currentVal -=0.05;
+                if (currentVal<=0.0)
                 {
-                    fOssiaAngleServo4.set( 1.0);
+                    currentVal = 0.0;
                 }
+                fOssiaAngleServo5.set(currentVal);
             }
         }
         break;
 
-    case 'k' :
-        fOssiaAngleServo5.set( servo5.getPos()-0.1);
+    case OF_KEY_LEFT :
+        {
+
+            {
+                float currentVal = fOssiaAngleServo5;
+                currentVal +=0.05;
+                if (currentVal>=1.0)
+                {
+                    currentVal = 1.0;
+                }
+                fOssiaAngleServo5.set(currentVal);
+                }
+        }
         break;
 
-
-    case 'm' :
-        fOssiaAngleServo5.set( servo5.getPos()+0.1);
-        break;
-
-    case OF_KEY_UP: kTilt += 1; if (kTilt > 30) kTilt = 30; kinect.setCameraTiltAngle(kTilt); break;
-    case OF_KEY_DOWN: kTilt -= 1; if (kTilt < -30) kTilt = -30; kinect.setCameraTiltAngle(kTilt); break;
+    case '+': kTilt += 1; if (kTilt > 30) kTilt = 30; kinect.setCameraTiltAngle(kTilt); break;
+    case '-': kTilt -= 1; if (kTilt < -30) kTilt = -30; kinect.setCameraTiltAngle(kTilt); break;
 
     default:
         break;
@@ -1053,8 +1067,8 @@ void ofApp::drawPoses() {
                 dir.rotate(g_means[i][3], g_means[i][4], g_means[i][5]);
                 dir += pos;
                 ofLine(pos.x, pos.y, pos.z, dir.x, dir.y, dir.z);
-                printf("pos x = %.1f\n",pos.x);
-                printf("pos y = %.1f\n",pos.y);
+                //printf("pos x = %.1f\n",pos.x);
+                //printf("pos y = %.1f\n",pos.y);
                 float xcm = (pos.x + float(w)/2)/37.795275590551;
                 float ycm = (pos.y + float(h)/2)/37.795275590551;
 
